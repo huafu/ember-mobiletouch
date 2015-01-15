@@ -115,14 +115,15 @@ export default Ember.Mixin.create({
 
     //set up events hash
     var mobileSettings = this.get('_mobileTouchConfig') || {},
-      events = mobileSettings.events || defaultConfig.events,
+      events = Ember.merge({}, mobileSettings.events || defaultConfig.events),
       gestures = mobileSettings.use || defaultConfig.use,
       alwaysTapOnPress = mobileSettings.alwaysTapOnPress || false;
 
     gestures.forEach(function (category) {
-      Ember.merge({}, events, hammerEvents[category] || {});
+      Ember.merge(events, hammerEvents[category] || {});
       defaultConfig.options[category] = true;
     });
+    Ember.Logger.debug('Available Events In Ember', events);
     this.set('events', events);
 
     //setup rootElement and initial events
@@ -161,7 +162,7 @@ export default Ember.Mixin.create({
 
     }
 
-    if (eventName === 'tap') {
+    if (['mouseMove', 'mouseEnter', 'mouseLeave'].indexOf(eventName) === -1) {
       Ember.Logger.debug('View ' + view.elementId + (view.has(eventName) ? ' has ' : ' does not have ') + 'a handler for ' + eventName);
       Ember.Logger.debug('View has the following filters', {
         allow: view.get('gestureAllow'),
