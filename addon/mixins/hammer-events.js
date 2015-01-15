@@ -161,6 +161,18 @@ export default Ember.Mixin.create({
 
     }
 
+    if (eventName === 'tap') {
+      Ember.Logger.debug('View ' + view.elementId + (view.has(eventName) ? ' has ' : ' does not have ') + 'a handler for ' + eventName);
+      Ember.Logger.debug('View has the following filters', {
+        allow: view.get('gestureAllow'),
+        exclude: view.get('gestureExclude')
+      });
+      Ember.Logger.debug('View should ' + (shouldFilter ? '' : 'not ') + 'filter the event.');
+      if (shouldFilter) {
+        Ember.Logger.debug('Filtered Target is: ', element);
+      }
+    }
+
     if (result === false) {
       if (event.stopPropagation) {
         Ember.Logger.debug('stopping propagation');
